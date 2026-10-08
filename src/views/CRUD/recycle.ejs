@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(180deg, #fffaf0 0%, #fff1db 100%);
+            color: #1f2937;
+            font-family: Arial, sans-serif;
+        }
+
+        .page-shell {
+            max-width: 1230px;
+            margin: 32px auto;
+            padding: 0 20px 40px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #b45309;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: rgba(180, 83, 9, 0.08);
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .table-card {
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        thead th {
+            background: #fff4e6;
+            color: #734d12;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-bottom: none;
+        }
+
+        tbody td,
+        tbody th {
+            vertical-align: middle;
+            padding: 14px 12px;
+            border-color: #fdf0df;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid #fcd34d;
+            box-shadow: 0 6px 12px rgba(245, 158, 11, 0.12);
+        }
+
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 0.55rem 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-shell">
+        <div class="page-header">
+            <h1>List of recycled Users</h1>
+            <div class="top-nav">
+                <a href="/" class="nav-link">Homepage</a>
+                <a href="/list" class="nav-link">User list</a>
+                <a href="/user/create" class="nav-link">Create users</a>
+            </div>
+        </div>
+
+        <nav class="toolbar">
+            <button class="btn btn-outline-warning" type="button">Recycle bin</button>
+        </nav>
+        <% if(data.length> 0) { %>
+            <div class="table-card">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sl no</th>
+                            <th scope="col">User ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Position</th>
+
+                            <th scope="col">Age</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Restore</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <% data.forEach((user, index)=> { %>
+                            <tr>
+                                <th scope="row">
+                                    <%= index +1 %>
+                                </th>
+                                <td>
+                                    <%= user.id.slice(-3) %>
+                                </td>
+                                <td>
+                                    <%= user.name %>
+                                </td>
+                                <td>
+                                    <%= user.position %>
+                                </td>
+                                <td>
+                                    <%= user.age %>
+                                </td>
+                                <td>
+                                    <%= user.email %>
+                                </td>
+                                <td><img class="user-avatar" src="/<%= user.image  %>" alt=""></td>
+                                <td>
+                                    <a href="/restore/<%= user.id  %>"><button type="button"
+                                            class="btn btn-primary">Restore</button></a>
+                                </td>
+                                <td>
+                                    <a href="/hardDelete/<%= user.id %>"
+                                        onclick="return confirm('Are you sure you want to delete?')"><button
+                                            type="button" class="btn btn-danger">Delete</button></a>
+                                </td>
+                            </tr>
+                            <% }); %>
+
+
+                                <% } else { %>
+
+                                    <h2 class="h5 mb-0">Recycle bin is empty.</h2>
+
+
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+    </div>
+
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

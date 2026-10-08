@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/CSS/style.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="page-shell">
+        <div class="page-header">
+            <h1>List of Users</h1>
+            <div class="top-nav">
+                <a href="/" class="nav-link">Homepage</a>
+                <a href="/user/create" class="nav-link">Create users</a>
+            </div>
+        </div>
+
+        <form action="/list" method="get">
+            <input type="search" name="search" id="searchForm" placeholder="Enter your search">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <label for="positions">Choose a role:</label>
+            <select name="roles" id="position">
+                <option value="role" disabled>Choose..</option>
+                <option value="all" <%=roles==="all" ? "selected" : "" %>>
+                    All
+                </option>
+                <option value="developer" <%=roles==="developer" ? "selected" : "" %>>
+                    Developer
+                </option>
+
+                <option value="designer" <%=roles==="designer" ? "selected" : "" %>>
+                    Designer
+                </option>
+
+                <option value="writer" <%=roles==="writer" ? "selected" : "" %>>
+                    Writer
+                </option>
+
+                <option value="others" <%=roles==="others" ? "selected" : "" %>>
+                    Others
+                </option>
+
+            </select>
+        </form>
+        <nav class="toolbar">
+            <a href="/recycle" class="btn btn-outline-warning">Recycle bin</a>
+        </nav>
+
+
+        <div class="table-card">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Sl no</th>
+                        <th scope="col">User ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(data.length> 0) { %>
+                        <% data.forEach((user, index)=> { %>
+                            <tr>
+                                <th scope="row">
+                                    <%= index +1 %>
+                                </th>
+                                <td>
+                                    <%= user.id.slice(-3) %>
+                                </td>
+                                <td>
+                                    <%= user.name %>
+                                </td>
+                                <td>
+                                    <%= user.position %>
+                                </td>
+                                <td>
+                                    <%= user.age %>
+                                </td>
+                                <td>
+                                    <%= user.email %>
+                                </td>
+                                <td><img class="user-avatar" src="/<%= user.image  %>" alt=""></td>
+                                <td>
+                                    <a href="/user/edit/<%= user.id  %>"><button type="button"
+                                            class="btn btn-primary">Edit</button></a>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#<%= user.id %>">
+                                        View
+                                    </button>
+                                    <!-- Button trigger modal -->
+
+
+                                    <!-- Modal -->
+                                    <div class="modal fade user-modal" id="<%= user.id %>" tabindex="-1"
+                                        aria-labelledby="<%= user.id %>" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="<%= user.id %>">
+                                                        <%= user.name %>
+                                                    </h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="user-profile-wrap">
+                                                        <img class="user-image-preview" src="<%= user.image  %>"
+                                                            alt="<%= user.name %>">
+                                                    </div>
+                                                    <div class="user-meta">
+                                                        <div class="user-detail"><strong>ID</strong><span>
+                                                                <%= user.id.slice(-3) %>
+                                                            </span></div>
+                                                        <div class="user-detail"><strong>Name</strong><span>
+                                                                <%= user.name %>
+                                                            </span></div>
+                                                        <div class="user-detail"><strong>Position</strong><span>
+                                                                <%= user.position %>
+                                                            </span></div>
+                                                        <div class="user-detail"><strong>Age</strong><span>
+                                                                <%= user.age %>
+                                                            </span></div>
+                                                        <div class="user-detail"><strong>Email</strong><span>
+                                                                <%= user.email %>
+                                                            </span></div>
+                                                        <div class="user-detail"><strong>Description</strong><span>
+                                                                <%= user.description %>
+                                                            </span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="/user/delete/<%= user.id %>"
+                                        onclick="return confirm('Are you sure you want to delete?')"><button
+                                            type="button" class="btn btn-danger">Delete</button></a>
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="8">
+                                            <h2 class="h5 mb-0">There is no data, please add one</h2>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="/JS/script.js"></script>
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,141 @@
+ <!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%);
+            color: #1f2937;
+            font-family: Arial, sans-serif;
+        }
+
+        .page-shell {
+            max-width: 780px;
+            margin: 40px auto;
+            padding: 0 18px 40px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #1d4ed8;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: rgba(29, 78, 216, 0.08);
+        }
+
+        .form-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 28px 24px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            border: 1px solid #dbe3f0;
+            padding: 0.7rem 0.9rem;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15);
+            border-color: #86b7fe;
+        }
+
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 0.7rem 1.2rem;
+        }
+
+        .error-text {
+            margin-top: 14px;
+            color: #dc2626;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-shell">
+        <div class="page-header">
+            <h1>Edit page</h1>
+            <div class="top-nav">
+                <a href="/list" class="nav-link">User lists</a>
+                <a href="/" class="nav-link">Home page</a>
+                <a href="/user/create" class="nav-link">Create User</a>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <form action="/user/edit/<%= data.id %>" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" name="name" value="<%= data.name  %>">
+                </div>
+                <div class="mb-3">
+                    <label for="position" class="form-label">Position</label>
+                    <input type="text" class="form-control" name="position" value="<%= data.position %>">
+                </div>
+
+                <div class="mb-3">
+                    <label for="age" class="form-label">Age</label>
+                    <input type="number" class="form-control" name="age" value="<%= data.age  %>">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" value="<%= data.email  %>">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <input type="text" class="form-control" name="description" value="<%= data.description  %>">
+                </div>
+                <div class="mb-3">
+                    <label for="file-upload" class="form-label">Choose a file</label>
+                    <input type="file" class="form-control" name="image" value="<%= data.image  %>">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            <p class="error-text"><%= error  %></p>
+        </div>
+    </div>
+
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
