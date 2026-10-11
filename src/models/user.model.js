@@ -12,7 +12,7 @@ const userSchema = new Schema(
     position: {
       type: String,
       required: [true, "Position is required"],
-      default: "Software developer"
+      default: "Software developer",
     },
     age: {
       type: Number,
@@ -32,11 +32,16 @@ const userSchema = new Schema(
 
     description: {
       type: String,
-      default: 'The user has not written any description.'
+      default: "The user has not written any description.",
     },
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+
+    publicImageID: {
+      type: String,
+      default: null,
     },
   },
   {

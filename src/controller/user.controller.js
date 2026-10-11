@@ -2,18 +2,18 @@ const { error } = require("console");
 const user = require("../models/user.model");
 const fs = require("fs");
 const path = require("path");
+const cloudinary = require("cloudinary").v2;
 class userController {
   async createUser(req, res) {
     console.log(req.file);
 
     try {
       const { name, position, age, email, description } = req.body;
-      console.log(req.body);
+      // console.log(req.body);
 
       if (!name || !position || !age || !email) {
         if (req.file) {
-          const filePath = path.join(__dirname, "../../", req.file.path);
-          await fs.promises.unlink(filePath);
+          await cloudinary.uploader.destroy(req.file.filename);
         }
         return res.render("CRUD/create", {
           error: "All fields are required",
@@ -31,6 +31,7 @@ class userController {
 
       if (req.file) {
         userData.image = req.file.path;
+        userData.publicImageID = req.file.filename;
       }
 
       const savedUser = await userData.save();
@@ -40,8 +41,7 @@ class userController {
       }
     } catch (error) {
       if (req.file) {
-        const filePath = path.join(__dirname, "../../", req.file.path);
-        await fs.promises.rm(filePath);
+        await cloudinary.uploader.destroy(req.file.filename);
       }
       return res.render("CRUD/create", {
         error: error.message,
@@ -62,7 +62,8 @@ class userController {
       if (roles === "others") {
         query.position = {
           $not: {
-            $regex: "developer|designer|writer", $options: "i"
+            $regex: "developer|designer|writer",
+            $options: "i",
           },
         };
       } else {
@@ -91,7 +92,7 @@ class userController {
     }
 
     console.log(query);
-    
+
     const users = await user.find(query);
 
     // console.log("USERS:", users);
@@ -132,18 +133,17 @@ class userController {
       const findUser = await user.findById(id);
       if (!findUser) {
         if (req.file) {
-          const filePath = path.join(__dirname, "../../", req.file.path);
-          await fs.promises.rm(filePath);
+          const publicImageID = req.file.filename;
+          if (publicImageID) {
+            await cloudinary.uploader.destroy(publicImageID);
+          }
         }
+        return res.redirect("/list")
       }
       console.log("sdfsfs", findUser.image);
 
-      if (req.file && findUser.image) {
-        const filePath = path.join(__dirname, "../../", findUser.image);
-
-        if (fs.existsSync(filePath)) {
-          await fs.promises.rm(filePath);
-        }
+      if (req.file && findUser.publicImageID) {
+        await cloudinary.uploader.destroy(findUser.publicImageID);
       }
 
       const { name, position, age, email, description } = req.body;
@@ -158,6 +158,7 @@ class userController {
 
       if (req.file) {
         updateData.image = req.file.path;
+        updateData.publicImageID = req.file.filename
       }
 
       console.log(req.file);
@@ -172,10 +173,7 @@ class userController {
       const id = req.params.id;
       const findUser = await user.findById(id);
       if (req.file) {
-        const filePath = path.join(__dirname, "../../", req.file.path);
-        if (filePath) {
-          await fs.promises.rm(filePath);
-        }
+        await cloudinary.uploader.destroy(req.file.filename)
         console.log(error);
 
         return res.render("CRUD/edit", {
@@ -235,11 +233,17 @@ class userController {
     try {
       const id = req.params.id;
       const findUser = await user.findById(id);
-      if (findUser.image) {
-        const filePath = path.join(__dirname, "../../", findUser.image);
-        if (filePath) {
-          await fs.promises.rm(filePath);
-        }
+      if (!findUser) {
+        return res.redirect("/list");
+      }
+
+      if (findUser.publicImageID) {
+        // const filePath = path.join(__dirname, "../../", findUser.image);
+        // if (filePath) {
+        //   await fs.promises.rm(filePath);
+        // }
+
+        await cloudinary.uploader.destroy(findUser.publicImageID);
       }
       await user.findByIdAndDelete(id);
 
